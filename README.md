@@ -17,44 +17,46 @@ The SoDark-6 Algorithm is designed for encryption of 48-bit words. It also uses 
 ## High Level Algorithms
 
 ### SBOX-Encryption Table
-| |0|1|2|3|4|5|6|7|8|9|A|B|C|D|E|F
-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|
-0|9C|F2|14|C1|8E|CB|B2|65|97|7A|60|17|92|F9|78|41
-1|07|4C|67|6D|66|4A|30|7D|53|9D|B5|BC|C3|CA|F1|04
-2|03|EC|D0|38|B0|ED|AD|C4|DD|56|42|BD|A0|DE|1B|81
-3|55|44|5A|E4|50|DC|43|63|09|5C|74|CF|0E|AB|1D|3D
-4|6B|02|5D|28|E7|C6|EE|B4|D9|7C|19|3E|5E|6C|D6|6E
-5|2A|13|A5|08|B9|2D|BB|A2|D4|96|39|E0|BA|D7|82|33
-6|0D|5F|26|16|FE|22|AF|00|11|C8|9E|88|8B|A1|7B|87
-7|27|E6|C7|94|D1|5B|9B|F0|9F|DB|E1|8D|D2|1F|6A|90
-8|F4|18|91|59|01|B1|FC|34|3C|37|47|29|E2|64|69|24
-9|0A|2F|73|71|A9|84|8C|A8|A3|3B|E3|E9|58|80|A7|D3
-A|B7|C2|1C|95|1E|4D|4F|4E|FB|76|FD|99|C5|C9|E8|2E
-B|8A|DF|F5|49|F3|6F|8F|E5|EB|F6|25|D5|31|C0|57|72
-C|AA|46|68|0B|93|89|83|70|EF|A4|85|F8|0F|B3|AC|10
-D|62|CC|61|40|F7|FA|52|7F|FF|32|45|20|79|CE|EA|BE
-E|CD|15|21|23|D8|B6|0C|3F|54|1A|BF|98|48|3A|75|77
-F|2B|AE|36|DA|7E|86|35|51|05|12|B8|A6|9A|2C|06|4B
+<table>
+    <tr><th></th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th></tr>
+    <tr><th>0</th><td>9C</td><td>F2</td><td>14</td><td>C1</td><td>8E</td><td>CB</td><td>B2</td><td>65</td><td>97</td><td>7A</td><td>60</td><td>17</td><td>92</td><td>F9</td><td>78</td><td>41</td></tr>
+    <tr><th>1</th><td>07</td><td>4C</td><td>67</td><td>6D</td><td>66</td><td>4A</td><td>30</td><td>7D</td><td>53</td><td>9D</td><td>B5</td><td>BC</td><td>C3</td><td>CA</td><td>F1</td><td>04</td></tr>
+    <tr><th>2</th><td>03</td><td>EC</td><td>D0</td><td>38</td><td>B0</td><td>ED</td><td>AD</td><td>C4</td><td>DD</td><td>56</td><td>42</td><td>BD</td><td>A0</td><td>DE</td><td>1B</td><td>81</td></tr>
+    <tr><th>3</th><td>55</td><td>44</td><td>5A</td><td>E4</td><td>50</td><td>DC</td><td>43</td><td>63</td><td>09</td><td>5C</td><td>74</td><td>CF</td><td>0E</td><td>AB</td><td>1D</td><td>3D</td></tr>
+    <tr><th>4</th><td>6B</td><td>02</td><td>5D</td><td>28</td><td>E7</td><td>C6</td><td>EE</td><td>B4</td><td>D9</td><td>7C</td><td>19</td><td>3E</td><td>5E</td><td>6C</td><td>D6</td><td>6E</td></tr>
+    <tr><th>5</th><td>2A</td><td>13</td><td>A5</td><td>08</td><td>B9</td><td>2D</td><td>BB</td><td>A2</td><td>D4</td><td>96</td><td>39</td><td>E0</td><td>BA</td><td>D7</td><td>82</td><td>33</td></tr>
+    <tr><th>6</th><td>0D</td><td>5F</td><td>26</td><td>16</td><td>FE</td><td>22</td><td>AF</td><td>00</td><td>11</td><td>C8</td><td>9E</td><td>88</td><td>8B</td><td>A1</td><td>7B</td><td>87</td></tr>
+    <tr><th>7</th><td>27</td><td>E6</td><td>C7</td><td>94</td><td>D1</td><td>5B</td><td>9B</td><td>F0</td><td>9F</td><td>DB</td><td>E1</td><td>8D</td><td>D2</td><td>1F</td><td>6A</td><td>90</td></tr>
+    <tr><th>8</th><td>F4</td><td>18</td><td>91</td><td>59</td><td>01</td><td>B1</td><td>FC</td><td>34</td><td>3C</td><td>37</td><td>47</td><td>29</td><td>E2</td><td>64</td><td>69</td><td>24</td></tr>
+    <tr><th>9</th><td>0A</td><td>2F</td><td>73</td><td>71</td><td>A9</td><td>84</td><td>8C</td><td>A8</td><td>A3</td><td>3B</td><td>E3</td><td>E9</td><td>58</td><td>80</td><td>A7</td><td>D3</td></tr>
+    <tr><th>A</th><td>B7</td><td>C2</td><td>1C</td><td>95</td><td>1E</td><td>4D</td><td>4F</td><td>4E</td><td>FB</td><td>76</td><td>FD</td><td>99</td><td>C5</td><td>C9</td><td>E8</td><td>2E</td></tr>
+    <tr><th>B</th><td>8A</td><td>DF</td><td>F5</td><td>49</td><td>F3</td><td>6F</td><td>8F</td><td>E5</td><td>EB</td><td>F6</td><td>25</td><td>D5</td><td>31</td><td>C0</td><td>57</td><td>72</td></tr>
+    <tr><th>C</th><td>AA</td><td>46</td><td>68</td><td>0B</td><td>93</td><td>89</td><td>83</td><td>70</td><td>EF</td><td>A4</td><td>85</td><td>F8</td><td>0F</td><td>B3</td><td>AC</td><td>10</td></tr>
+    <tr><th>D</th><td>62</td><td>CC</td><td>61</td><td>40</td><td>F7</td><td>FA</td><td>52</td><td>7F</td><td>FF</td><td>32</td><td>45</td><td>20</td><td>79</td><td>CE</td><td>EA</td><td>BE</td></tr>
+    <tr><th>E</th><td>CD</td><td>15</td><td>21</td><td>23</td><td>D8</td><td>B6</td><td>0C</td><td>3F</td><td>54</td><td>1A</td><td>BF</td><td>98</td><td>48</td><td>3A</td><td>75</td><td>77</td></tr>
+    <tr><th>F</th><td>2B</td><td>AE</td><td>36</td><td>DA</td><td>7E</td><td>86</td><td>35</td><td>51</td><td>05</td><td>12</td><td>B8</td><td>A6</td><td>9A</td><td>2C</td><td>06</td><td>4B</td></tr>
+</table>
 
 ### SBOX-Decryption Table
-| |0|1|2|3|4|5|6|7|8|9|A|B|C|D|E|F
-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|
-0|67|84|41|20|1F|F8|FE|10|53|38|90|C3|E6|60|3C|CC
-1|CF|68|F9|51|02|E1|63|0B|81|4A|E9|2E|A2|3E|A4|7D
-2|DB|E2|65|E3|8F|BA|62|70|43|8B|50|F0|FD|55|AF|91
-3|16|BC|D9|5F|87|F6|F2|89|23|5A|ED|99|88|3F|4B|E7
-4|D3|0F|2A|36|31|DA|C1|8A|EC|B3|15|FF|11|A5|A7|A6
-5|34|F7|D6|18|E8|30|29|BE|9C|83|32|75|39|42|4C|61
-6|0A|D2|D0|37|8D|07|14|12|C2|8E|7E|40|4D|13|4F|B5
-7|C7|93|BF|92|3A|EE|A9|EF|0E|DC|09|6E|49|17|F4|D7
-8|9D|2F|5E|C6|95|CA|F5|6F|6B|C5|B0|6C|96|7B|04|B6
-9|7F|82|0C|C4|73|A3|59|08|EB|AB|FC|76|00|19|6A|78
-A|2C|6D|57|98|C9|52|FB|9E|97|94|C0|3D|CE|26|F1|66
-B|24|85|06|CD|47|1A|E5|A0|FA|54|5C|56|1B|2B|DF|EA
-C|BD|03|A1|1C|27|AC|45|72|69|AD|1D|05|D1|E0|DD|3B
-D|22|74|7C|9F|58|BB|4E|5D|E4|48|F3|79|35|28|2D|B1
-E|5B|7A|8C|9A|33|B7|71|44|AE|9B|DE|B8|21|25|46|C8
-F|77|1E|01|B4|80|B2|B9|D4|CB|0D|D5|A8|86|AA|64|D8
+<table>
+    <tr><th></th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th></tr>
+    <tr><th>0</th><td>67</td><td>84</td><td>41</td><td>20</td><td>1F</td><td>F8</td><td>FE</td><td>10</td><td>53</td><td>38</td><td>90</td><td>C3</td><td>E6</td><td>60</td><td>3C</td><td>CC</td></tr>
+    <tr><th>1</th><td>CF</td><td>68</td><td>F9</td><td>51</td><td>02</td><td>E1</td><td>63</td><td>0B</td><td>81</td><td>4A</td><td>E9</td><td>2E</td><td>A2</td><td>3E</td><td>A4</td><td>7D</td></tr>
+    <tr><th>2</th><td>DB</td><td>E2</td><td>65</td><td>E3</td><td>8F</td><td>BA</td><td>62</td><td>70</td><td>43</td><td>8B</td><td>50</td><td>F0</td><td>FD</td><td>55</td><td>AF</td><td>91</td></tr>
+    <tr><th>3</th><td>16</td><td>BC</td><td>D9</td><td>5F</td><td>87</td><td>F6</td><td>F2</td><td>89</td><td>23</td><td>5A</td><td>ED</td><td>99</td><td>88</td><td>3F</td><td>4B</td><td>E7</td></tr>
+    <tr><th>4</th><td>D3</td><td>0F</td><td>2A</td><td>36</td><td>31</td><td>DA</td><td>C1</td><td>8A</td><td>EC</td><td>B3</td><td>15</td><td>FF</td><td>11</td><td>A5</td><td>A7</td><td>A6</td></tr>
+    <tr><th>5</th><td>34</td><td>F7</td><td>D6</td><td>18</td><td>E8</td><td>30</td><td>29</td><td>BE</td><td>9C</td><td>83</td><td>32</td><td>75</td><td>39</td><td>42</td><td>4C</td><td>61</td></tr>
+    <tr><th>6</th><td>0A</td><td>D2</td><td>D0</td><td>37</td><td>8D</td><td>07</td><td>14</td><td>12</td><td>C2</td><td>8E</td><td>7E</td><td>40</td><td>4D</td><td>13</td><td>4F</td><td>B5</td></tr>
+    <tr><th>7</th><td>C7</td><td>93</td><td>BF</td><td>92</td><td>3A</td><td>EE</td><td>A9</td><td>EF</td><td>0E</td><td>DC</td><td>09</td><td>6E</td><td>49</td><td>17</td><td>F4</td><td>D7</td></tr>
+    <tr><th>8</th><td>9D</td><td>2F</td><td>5E</td><td>C6</td><td>95</td><td>CA</td><td>F5</td><td>6F</td><td>6B</td><td>C5</td><td>B0</td><td>6C</td><td>96</td><td>7B</td><td>04</td><td>B6</td></tr>
+    <tr><th>9</th><td>7F</td><td>82</td><td>0C</td><td>C4</td><td>73</td><td>A3</td><td>59</td><td>08</td><td>EB</td><td>AB</td><td>FC</td><td>76</td><td>00</td><td>19</td><td>6A</td><td>78</td></tr>
+    <tr><th>A</th><td>2C</td><td>6D</td><td>57</td><td>98</td><td>C9</td><td>52</td><td>FB</td><td>9E</td><td>97</td><td>94</td><td>C0</td><td>3D</td><td>CE</td><td>26</td><td>F1</td><td>66</td></tr>
+    <tr><th>B</th><td>24</td><td>85</td><td>06</td><td>CD</td><td>47</td><td>1A</td><td>E5</td><td>A0</td><td>FA</td><td>54</td><td>5C</td><td>56</td><td>1B</td><td>2B</td><td>DF</td><td>EA</td></tr>
+    <tr><th>C</th><td>BD</td><td>03</td><td>A1</td><td>1C</td><td>27</td><td>AC</td><td>45</td><td>72</td><td>69</td><td>AD</td><td>1D</td><td>05</td><td>D1</td><td>E0</td><td>DD</td><td>3B</td></tr>
+    <tr><th>D</th><td>22</td><td>74</td><td>7C</td><td>9F</td><td>58</td><td>BB</td><td>4E</td><td>5D</td><td>E4</td><td>48</td><td>F3</td><td>79</td><td>35</td><td>28</td><td>2D</td><td>B1</td></tr>
+    <tr><th>E</th><td>5B</td><td>7A</td><td>8C</td><td>9A</td><td>33</td><td>B7</td><td>71</td><td>44</td><td>AE</td><td>9B</td><td>DE</td><td>B8</td><td>21</td><td>25</td><td>46</td><td>C8</td></tr>
+    <tr><th>F</th><td>77</td><td>1E</td><td>01</td><td>B4</td><td>80</td><td>B2</td><td>B9</td><td>D4</td><td>CB</td><td>0D</td><td>D5</td><td>A8</td><td>86</td><td>AA</td><td>64</td><td>D8</td></tr>
+</table>
 
 ### SoDark-3 Encryption
 ```
