@@ -47,9 +47,14 @@ namespace sodark3
                                                 uint64_t key /*56 bits*/,
                                                 uint64_t seed /*64 bits*/) noexcept
 {
-    // A(r) = e[A(r-1) xor B(r-1) xor K[(3 * r - 3) % 7 + 1] xor S[(3 * r - 3) % 8]]
-    // C(r) = e[C(r-1) xor B(r-1) xor K[(3 * r - 2) % 7 + 1] xor S[(3 * r - 2) % 8]]
-    // B(r) = e[B(r-1) xor A(r) xor C(r) xor K[(3 * r - 1) % 7 + 1] xor S[(3 * r - 1) % 8]]
+    /******************************************************************************************
+    A=I[1], B=I[2], C=I[3]
+    r: 1...rounds
+        A(r) = e[A(r-1) xor B(r-1) xor K[(3 * r - 3) % 7 + 1] xor S[(3 * r - 3) % 8]]
+        C(r) = e[C(r-1) xor B(r-1) xor K[(3 * r - 2) % 7 + 1] xor S[(3 * r - 2) % 8]]
+        B(r) = e[B(r-1) xor A(r) xor C(r) xor K[(3 * r - 1) % 7 + 1] xor S[(3 * r - 1) % 8]]
+    O={0,A,B,C}
+    ******************************************************************************************/
 
     auto ct = sodark::utility::to_array(plain_text);
     auto k  = sodark::utility::to_array(key);
@@ -71,9 +76,14 @@ namespace sodark3
                                                 uint64_t key /*56 bits*/,
                                                 uint64_t seed /*64 bits*/) noexcept
 {
-    // B(r) = d[B(r-1)] xor A(r-1) xor C(r-1) xor K[(3 * r - 1) % 7 + 1] xor S[(3 * r - 1) % 8]
-    // C(r) = d[C(r-1)] xor B(r) xor K[(3 * r - 2) % 7 + 1] xor S[(3 * r - 2) % 8]
-    // A(r) = d[A(r-1)] xor B(r) xor K[(3 * r - 3) % 7 + 1] xor S[(3 * r - 3) % 8]
+    /******************************************************************************************
+    A=I[1], B=I[2], C=I[3]
+    r: rounds...1
+        B(r) = d[B(r-1)] xor A(r-1) xor C(r-1) xor K[(3 * r - 1) % 7 + 1] xor S[(3 * r - 1) % 8]
+        C(r) = d[C(r-1)] xor B(r) xor K[(3 * r - 2) % 7 + 1] xor S[(3 * r - 2) % 8]
+        A(r) = d[A(r-1)] xor B(r) xor K[(3 * r - 3) % 7 + 1] xor S[(3 * r - 3) % 8]
+    O={0,A,B,C}
+    ******************************************************************************************/
 
     auto pt = sodark::utility::to_array(cypher_text);
     auto k  = sodark::utility::to_array(key);
@@ -100,12 +110,17 @@ namespace sodark6
                                                 uint64_t key /*56 bits*/,
                                                 uint64_t seed /*64 bits*/) noexcept
 {
-    // A(r) = e[A(r-1) xor B(r-1) xor F(r-1) xor K[(6 * r - 6) % 7 + 1] xor S[(6 * r - 6) % 8]]
-    // C(r) = e[C(r-1) xor B(r-1) xor D(r-1) xor K[(6 * r - 5) % 7 + 1] xor S[(6 * r - 5) % 8]]
-    // E(r) = e[E(r-1) xor D(r-1) xor F(r-1) xor K[(6 * r - 4) % 7 + 1] xor S[(6 * r - 4) % 8]]
-    // B(r) = e[B(r-1) xor A(r) xor C(r) xor K[(6 * r - 3) % 7 + 1] xor S[(6 * r - 3) % 8]]
-    // D(r) = e[D(r-1) xor C(r) xor E(r) xor K[(6 * r - 2) % 7 + 1] xor S[(6 * r - 2) % 8]]
-    // F(r) = e[F(r-1) xor A(r) xor E(r) xor K[(6 * r - 1) % 7 + 1] xor S[(6 * r - 1) % 8]]
+    /******************************************************************************************
+    A=I[2], B=I[3], C=I[4], D=I[5], E=I[6], F=I[7]
+    r: 1...rounds
+        A(r) = e[A(r-1) xor B(r-1) xor F(r-1) xor K[(6 * r - 6) % 7 + 1] xor S[(6 * r - 6) % 8]]
+        C(r) = e[C(r-1) xor B(r-1) xor D(r-1) xor K[(6 * r - 5) % 7 + 1] xor S[(6 * r - 5) % 8]]
+        E(r) = e[E(r-1) xor D(r-1) xor F(r-1) xor K[(6 * r - 4) % 7 + 1] xor S[(6 * r - 4) % 8]]
+        B(r) = e[B(r-1) xor A(r) xor C(r) xor K[(6 * r - 3) % 7 + 1] xor S[(6 * r - 3) % 8]]
+        D(r) = e[D(r-1) xor C(r) xor E(r) xor K[(6 * r - 2) % 7 + 1] xor S[(6 * r - 2) % 8]]
+        F(r) = e[F(r-1) xor A(r) xor E(r) xor K[(6 * r - 1) % 7 + 1] xor S[(6 * r - 1) % 8]]
+    O={0,0,A,B,C,D,E,F}
+    ******************************************************************************************/
 
     auto ct = sodark::utility::to_array(plain_text);
     auto k  = sodark::utility::to_array(key);
@@ -133,12 +148,17 @@ namespace sodark6
                                                 uint64_t key /*56 bits*/,
                                                 uint64_t seed /*64 bits*/) noexcept
 {
-    // B(r) = d[B(r-1)] xor A(r-1) xor C(r-1) xor K[(6 * r - 3) % 7 + 1] xor S[(6 * r - 3) % 8]
-    // D(r) = d[D(r-1)] xor C(r-1) xor E(r-1) xor K[(6 * r - 2) % 7 + 1] xor S[(6 * r - 2) % 8]
-    // F(r) = d[F(r-1)] xor A(r-1) xor E(r-1) xor K[(6 * r - 1) % 7 + 1] xor S[(6 * r - 1) % 8]
-    // E(r) = d[E(r-1)] xor D(r) xor F(r) xor K[(6 * r - 4) % 7 + 1] xor S[(6 * r - 4) % 8]
-    // C(r) = d[C(r-1)] xor B(r) xor D(r) xor K[(6 * r - 5) % 7 + 1] xor S[(6 * r - 5) % 8]
-    // A(r) = d[A(r-1)] xor B(r) xor F(r) xor K[(6 * r - 6) % 7 + 1] xor S[(6 * r - 6) % 8]
+    /******************************************************************************************
+    A=I[2], B=I[3], C=I[4], D=I[5], E=I[6], F=I[7]
+    r: rounds...1
+        B(r) = d[B(r-1)] xor A(r-1) xor C(r-1) xor K[(6 * r - 3) % 7 + 1] xor S[(6 * r - 3) % 8]
+        D(r) = d[D(r-1)] xor C(r-1) xor E(r-1) xor K[(6 * r - 2) % 7 + 1] xor S[(6 * r - 2) % 8]
+        F(r) = d[F(r-1)] xor A(r-1) xor E(r-1) xor K[(6 * r - 1) % 7 + 1] xor S[(6 * r - 1) % 8]
+        E(r) = d[E(r-1)] xor D(r) xor F(r) xor K[(6 * r - 4) % 7 + 1] xor S[(6 * r - 4) % 8]
+        C(r) = d[C(r-1)] xor B(r) xor D(r) xor K[(6 * r - 5) % 7 + 1] xor S[(6 * r - 5) % 8]
+        A(r) = d[A(r-1)] xor B(r) xor F(r) xor K[(6 * r - 6) % 7 + 1] xor S[(6 * r - 6) % 8]
+    O={0,0,A,B,C,D,E,F}
+    ******************************************************************************************/
 
     auto pt = sodark::utility::to_array(cypher_text);
     auto k  = sodark::utility::to_array(key);
