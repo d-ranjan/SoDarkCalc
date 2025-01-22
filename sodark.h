@@ -5,6 +5,7 @@
 
 #include <array>
 #include <cstdint>
+#include <ranges>
 
 namespace sodark::internal
 {
@@ -30,8 +31,8 @@ constexpr std::array<uint32_t, 256> sbox_enc {
 [[nodiscard]] static consteval auto create_sodark_dec_sbox() noexcept -> std::array<uint32_t, 256>
 {
     std::array<uint32_t, 256> sbox_dec {};
-    for (uint16_t i = 0; i < 256; i++) {
-        sbox_dec[sbox_enc[i]] = i;
+    for (const auto& i : std::views::iota(0, 256)) {
+        sbox_dec.at(sbox_enc.at(i)) = i;
     }
     return sbox_dec;
 }
@@ -43,9 +44,9 @@ constexpr std::array<uint32_t, 256> sbox_dec = create_sodark_dec_sbox();
 namespace sodark3
 {
 
-[[nodiscard]] static constexpr uint32_t encrypt(uint32_t rounds, uint32_t plain_text /*24 bits*/,
-                                                uint64_t key /*56 bits*/,
-                                                uint64_t seed /*64 bits*/) noexcept
+[[nodiscard]] static constexpr auto encrypt(uint8_t rounds, uint32_t plain_text /*24 bits*/,
+                                            uint64_t key /*56 bits*/,
+                                            uint64_t seed /*64 bits*/) noexcept -> uint32_t
 {
     /******************************************************************************************
     A=I[1], B=I[2], C=I[3]
@@ -61,9 +62,9 @@ namespace sodark3
     auto s  = sodark::utility::to_array(seed);
 
     for (uint8_t r = 1; r <= rounds; ++r) {
-        const uint8_t rka = k[(3 * r - 3) % 7 + 1] ^ s[(3 * r - 3) % 8];
-        const uint8_t rkc = k[(3 * r - 2) % 7 + 1] ^ s[(3 * r - 2) % 8];
-        const uint8_t rkb = k[(3 * r - 1) % 7 + 1] ^ s[(3 * r - 1) % 8];
+        const uint8_t rka = k[((3 * r - 3) % 7) + 1] ^ s[(3 * r - 3) % 8];
+        const uint8_t rkc = k[((3 * r - 2) % 7) + 1] ^ s[(3 * r - 2) % 8];
+        const uint8_t rkb = k[((3 * r - 1) % 7) + 1] ^ s[(3 * r - 1) % 8];
 
         ct[1] = sodark::internal::sbox_enc[ct[1] ^ ct[2] ^ rka];
         ct[3] = sodark::internal::sbox_enc[ct[3] ^ ct[2] ^ rkc];
@@ -72,9 +73,9 @@ namespace sodark3
     return sodark::utility::to_int(ct);
 }
 
-[[nodiscard]] static constexpr uint32_t decrypt(uint8_t rounds, uint32_t cypher_text /*24 bits*/,
-                                                uint64_t key /*56 bits*/,
-                                                uint64_t seed /*64 bits*/) noexcept
+[[nodiscard]] static constexpr auto decrypt(uint8_t rounds, uint32_t cypher_text /*24 bits*/,
+                                            uint64_t key /*56 bits*/,
+                                            uint64_t seed /*64 bits*/) noexcept -> uint32_t
 {
     /******************************************************************************************
     A=I[1], B=I[2], C=I[3]
@@ -90,9 +91,9 @@ namespace sodark3
     auto s  = sodark::utility::to_array(seed);
 
     for (uint8_t r = rounds; r >= 1; --r) {
-        const uint8_t rka = k[(3 * r - 3) % 7 + 1] ^ s[(3 * r - 3) % 8];
-        const uint8_t rkc = k[(3 * r - 2) % 7 + 1] ^ s[(3 * r - 2) % 8];
-        const uint8_t rkb = k[(3 * r - 1) % 7 + 1] ^ s[(3 * r - 1) % 8];
+        const uint8_t rka = k[((3 * r - 3) % 7) + 1] ^ s[(3 * r - 3) % 8];
+        const uint8_t rkc = k[((3 * r - 2) % 7) + 1] ^ s[(3 * r - 2) % 8];
+        const uint8_t rkb = k[((3 * r - 1) % 7) + 1] ^ s[(3 * r - 1) % 8];
 
         pt[2] = sodark::internal::sbox_dec[pt[2]] ^ pt[1] ^ pt[3] ^ rkb;
         pt[3] = sodark::internal::sbox_dec[pt[3]] ^ pt[2] ^ rkc;
@@ -106,9 +107,9 @@ namespace sodark3
 namespace sodark6
 {
 
-[[nodiscard]] static constexpr uint64_t encrypt(uint32_t rounds, uint64_t plain_text /*48 bits*/,
-                                                uint64_t key /*56 bits*/,
-                                                uint64_t seed /*64 bits*/) noexcept
+[[nodiscard]] static constexpr auto encrypt(uint32_t rounds, uint64_t plain_text /*48 bits*/,
+                                            uint64_t key /*56 bits*/,
+                                            uint64_t seed /*64 bits*/) noexcept -> uint64_t
 {
     /******************************************************************************************
     A=I[2], B=I[3], C=I[4], D=I[5], E=I[6], F=I[7]
@@ -127,12 +128,12 @@ namespace sodark6
     auto s  = sodark::utility::to_array(seed);
 
     for (uint8_t r = 1; r <= rounds; ++r) {
-        const uint8_t rka = k[(6 * r - 6) % 7 + 1] ^ s[(6 * r - 6) % 8];
-        const uint8_t rkc = k[(6 * r - 5) % 7 + 1] ^ s[(6 * r - 5) % 8];
-        const uint8_t rke = k[(6 * r - 4) % 7 + 1] ^ s[(6 * r - 4) % 8];
-        const uint8_t rkb = k[(6 * r - 3) % 7 + 1] ^ s[(6 * r - 3) % 8];
-        const uint8_t rkd = k[(6 * r - 2) % 7 + 1] ^ s[(6 * r - 2) % 8];
-        const uint8_t rkf = k[(6 * r - 1) % 7 + 1] ^ s[(6 * r - 1) % 8];
+        const uint8_t rka = k[((6 * r - 6) % 7) + 1] ^ s[(6 * r - 6) % 8];
+        const uint8_t rkc = k[((6 * r - 5) % 7) + 1] ^ s[(6 * r - 5) % 8];
+        const uint8_t rke = k[((6 * r - 4) % 7) + 1] ^ s[(6 * r - 4) % 8];
+        const uint8_t rkb = k[((6 * r - 3) % 7) + 1] ^ s[(6 * r - 3) % 8];
+        const uint8_t rkd = k[((6 * r - 2) % 7) + 1] ^ s[(6 * r - 2) % 8];
+        const uint8_t rkf = k[((6 * r - 1) % 7) + 1] ^ s[(6 * r - 1) % 8];
 
         ct[2] = sodark::internal::sbox_enc[ct[2] ^ ct[3] ^ ct[7] ^ rka];
         ct[4] = sodark::internal::sbox_enc[ct[4] ^ ct[3] ^ ct[5] ^ rkc];
@@ -144,9 +145,9 @@ namespace sodark6
     return sodark::utility::to_llong(ct);
 }
 
-[[nodiscard]] static constexpr uint64_t decrypt(uint32_t rounds, uint64_t cypher_text /*48 bits*/,
-                                                uint64_t key /*56 bits*/,
-                                                uint64_t seed /*64 bits*/) noexcept
+[[nodiscard]] static constexpr auto decrypt(uint32_t rounds, uint64_t cypher_text /*48 bits*/,
+                                            uint64_t key /*56 bits*/,
+                                            uint64_t seed /*64 bits*/) noexcept -> uint64_t
 {
     /******************************************************************************************
     A=I[2], B=I[3], C=I[4], D=I[5], E=I[6], F=I[7]
@@ -165,12 +166,12 @@ namespace sodark6
     auto s  = sodark::utility::to_array(seed);
 
     for (uint8_t r = rounds; r >= 1; --r) {
-        const uint8_t rka = k[(6 * r - 6) % 7 + 1] ^ s[(6 * r - 6) % 8];
-        const uint8_t rkc = k[(6 * r - 5) % 7 + 1] ^ s[(6 * r - 5) % 8];
-        const uint8_t rke = k[(6 * r - 4) % 7 + 1] ^ s[(6 * r - 4) % 8];
-        const uint8_t rkb = k[(6 * r - 3) % 7 + 1] ^ s[(6 * r - 3) % 8];
-        const uint8_t rkd = k[(6 * r - 2) % 7 + 1] ^ s[(6 * r - 2) % 8];
-        const uint8_t rkf = k[(6 * r - 1) % 7 + 1] ^ s[(6 * r - 1) % 8];
+        const uint8_t rka = k[((6 * r - 6) % 7) + 1] ^ s[(6 * r - 6) % 8];
+        const uint8_t rkc = k[((6 * r - 5) % 7) + 1] ^ s[(6 * r - 5) % 8];
+        const uint8_t rke = k[((6 * r - 4) % 7) + 1] ^ s[(6 * r - 4) % 8];
+        const uint8_t rkb = k[((6 * r - 3) % 7) + 1] ^ s[(6 * r - 3) % 8];
+        const uint8_t rkd = k[((6 * r - 2) % 7) + 1] ^ s[(6 * r - 2) % 8];
+        const uint8_t rkf = k[((6 * r - 1) % 7) + 1] ^ s[(6 * r - 1) % 8];
 
         pt[3] = sodark::internal::sbox_dec[pt[3]] ^ pt[2] ^ pt[4] ^ rkb;
         pt[5] = sodark::internal::sbox_dec[pt[5]] ^ pt[4] ^ pt[6] ^ rkd;
