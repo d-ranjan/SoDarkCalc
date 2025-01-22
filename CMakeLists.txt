@@ -11,6 +11,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_compile_options(-Wall -Wextra -Wpedantic -Wshadow -Wunreachable-code -Werror)
 
+# add dependencies
+include(cmake/CPM.cmake)
+
+CPMAddPackage("gh:fmtlib/fmt#11.1.2")
+
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
@@ -27,6 +32,7 @@ qt_add_executable(SodarkCalc MANUAL_FINALIZATION ${SOURCES})
 
 target_link_libraries(SodarkCalc PRIVATE
     Qt${QT_VERSION_MAJOR}::Widgets
+    fmt::fmt
 )
 
 set_target_properties(SodarkCalc PROPERTIES

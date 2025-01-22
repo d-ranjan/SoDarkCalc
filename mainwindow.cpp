@@ -7,11 +7,15 @@
 #include <QMessageBox>
 #include <cassert>
 
+#include <fmt/ranges.h>
+
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent),
       ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    // fmt::println("{::#}", std::views::iota(0,10));
 
     static_assert(sodark3::encrypt(1, 0x54e0cd, 0xc2284a1ce7be2f, 0x543bd88000017550) == 0xD0721D);
     static_assert(sodark3::decrypt(1, 0xD0721D, 0xc2284a1ce7be2f, 0x543bd88000017550) == 0x54e0cd);
