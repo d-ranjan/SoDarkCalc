@@ -1,0 +1,14 @@
+Checks: '*,
+         -abseil-*,
+         -altera-*,
+         -android-*,
+         -fuchsia-*,
+         -google-*,
+         -llvm*,
+         -zircon-*,
+         -readability-identifier-length,
+         -misc-include-cleaner,
+         -misc-non-private-member-variables-in-classes
+'
+
+WarningsAsErrors: '*'
